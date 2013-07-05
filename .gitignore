@@ -1,0 +1,6 @@
+logs/
+
+node_modules/
+
+#vim temporary files
+*.swp
