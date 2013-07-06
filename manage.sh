@@ -9,7 +9,7 @@ SERVER_FILE="${BASE_PATH}server.js"
 
 ########## Helpers ##########
 
-serverIsRunning() {
+checkServerIsRunning() {
   #Get rid of all columns but the script name
   forever columns set script > /dev/null
   
@@ -36,7 +36,7 @@ serverIsRunning() {
 
 start() {
   #Start the server
-  serverIsRunning
+  checkServerIsRunning
   if [[ $? == 0 ]]
   then
     forever start -al ${LOG_PATH}forever.log -ao ${LOG_PATH}out.log -ae ${LOG_PATH}err.log ${SERVER_FILE}
@@ -47,7 +47,13 @@ start() {
 
 stop() {
   #Stop the server
-  forever stop ${SERVER_FILE}
+  checkServerIsRunning
+  if [[ $? == 0 ]]
+  then
+    echo "The server is already stopped"
+  else
+    forever stop ${SERVER_FILE}
+  fi
 }
 
 restart() {
@@ -57,7 +63,7 @@ restart() {
 
 status() {
   #Print the server status
-  serverIsRunning
+  checkServerIsRunning
   if [[ $? == 0 ]]
   then
     echo "[${SERVER_FILE}] status: stopped"
