@@ -9,16 +9,6 @@ SERVER_FILE="${BASE_PATH}server.js"
 
 ########## Helpers ##########
 
-printUsage() {
-  echo -ne "\tUsage: ${0} [action]\n";
-  echo -ne "\n";
-  echo -ne "\tActions:\n";
-  echo -ne "\t\tstart"; 	echo -ne "\t\tStarts the server\n";
-  echo -ne "\t\tstop";		echo -ne "\t\tStops the server\n";
-  echo -ne "\t\trestart";	echo -ne "\t\tRestarts the server\n";
-  echo -ne "\t\tstatus";	echo -ne "\t\tPrints whether or not the server is running\n";
-}
-
 serverIsRunning() {
   #Get rid of all columns but the script name
   forever columns set script > /dev/null
@@ -42,10 +32,9 @@ serverIsRunning() {
 
 
 
-########## Actions ##########
+########## Action Methods ##########
 
-if [[ $1 == "start" ]]
-then
+start() {
   #Start the server
   serverIsRunning
   if [[ $? == 0 ]]
@@ -54,16 +43,19 @@ then
   else
     echo "The server is already running"
   fi
-elif [[ $1 == "stop" ]]
-then
+}
+
+stop() {
   #Stop the server
   forever stop ${SERVER_FILE}
-elif [[ $1 == "restart" ]]
-then
+}
+
+restart() {
   #Restart the server
   forever restart ${SERVER_FILE}
-elif [[ $1 == "status" ]]
-then
+}
+
+status() {
   #Print the server status
   serverIsRunning
   if [[ $? == 0 ]]
@@ -72,9 +64,39 @@ then
   else
     echo "[${SERVER_FILE}] status: running"
   fi
-else
+}
+
+help() {
   #Print a help message for this script
-  printUsage
+  echo -ne "\tUsage: ${0} [action]\n";
+  echo -ne "\n";
+  echo -ne "\tActions:\n";
+  echo -ne "\t\tstart";         echo -ne "\t\tStarts the server\n";
+  echo -ne "\t\tstop";          echo -ne "\t\tStops the server\n";
+  echo -ne "\t\trestart";       echo -ne "\t\tRestarts the server\n";
+  echo -ne "\t\tstatus";        echo -ne "\t\tPrints whether or not the server is running\n";
+}
+
+##############################
+
+
+
+########## Actions ##########
+
+if [[ $1 == "start" ]]
+then
+  start
+elif [[ $1 == "stop" ]]
+then
+  stop
+elif [[ $1 == "restart" ]]
+then
+  restart
+elif [[ $1 == "status" ]]
+then
+  status
+else
+  help
 fi
 
 ##############################
