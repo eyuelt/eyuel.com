@@ -1,6 +1,6 @@
 #!/bin/bash
-
-#This file supports various actions for managing the server.
+#
+# This file supports various actions for managing the server.
 
 BASE_PATH="/home/deploy/server/"
 LOG_PATH="${BASE_PATH}logs/"
