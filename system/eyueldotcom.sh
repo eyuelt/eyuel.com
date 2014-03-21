@@ -6,7 +6,7 @@
 
 
 handle() {
-  su -c "~/server/manage.sh $1" deploy
+  su -c "~/server/system/manage.sh $1" deploy
 }
 
 

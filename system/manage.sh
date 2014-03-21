@@ -12,7 +12,7 @@ SERVER_FILE="${BASE_PATH}server.js"
 checkServerIsRunning() {
   #Get rid of all columns but the script name
   forever columns set script > /dev/null
-  
+
   output=`forever list | grep "\[[0-9]*\]" | grep "${SERVER_FILE}"`
   if [[ $output == "" ]]
   then
