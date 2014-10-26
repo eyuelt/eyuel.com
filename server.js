@@ -1,28 +1,18 @@
 var express = require('express');
-var app = express();
-var fs = require('fs');
+var routes = require('./src/routes/index');
+var app = module.exports = express();
 
-SERVER_ROOT_DIR='/home/deploy/server/'
-RESOURCE_DIR=SERVER_ROOT_DIR+'resources/'
+//config
+app.set('port', process.env.PORT || 8080);
+app.set('views', __dirname + '/src/views');
+app.set('view engine', 'jade');
+app.use('/static', express.static(__dirname + '/src/public'));
 
-app.get('/', function(req, res) {
-  var body = '<html><head><title>Hello</title></head><body>';
-  body += '<center><img src="/cookies" /></center>';
-  body += '</body></html>';
-  res.send(body);
+//routes
+app.get('/', routes.homepage);
+app.get('*', routes.notfound);
+
+//start server
+app.listen(app.get('port'), function() {
+  console.log('Server listening on port ' + app.get('port'));
 });
-
-app.get('/error', function(req, res) {
-  console.log("Throwing error");
-  console.log(req.url);
-  throw "oops thats an error";
-});
-
-app.get('/cookies', function(req, res) {
-  res.writeHead(200, {'Content-Type': 'image/jpg'});
-  var img = fs.readFileSync(RESOURCE_DIR+'cookies.jpg');
-  res.end(img, 'binary');
-});
-
-app.listen(8080);
-console.log('Listening on port 8080');
