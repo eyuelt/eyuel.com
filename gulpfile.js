@@ -1,11 +1,17 @@
 var gulp = require('gulp');
-var app = require('./server');
 var del = require('del');
+var gulpNodemon = require('gulp-nodemon');
+
+var appFile = './server.js';
+var app = require(appFile);
+var appPort = app.get('port');
+
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
-
-var appPort = 8000;
 var browserSyncPort = 8001;
+
+var nodemon;
+
 
 //Clean
 gulp.task('clean:styles', function() {
@@ -45,12 +51,10 @@ gulp.task('watch', function() {
     gulp.watch('src/scripts/**/*', ['build:scripts']);
     gulp.watch('src/images/**/*', ['build:images']);
     gulp.watch('views/**/*', ['bs-reload']);
-    gulp.watch(['routes/**/*', 'server.js'], ['bs-reload']); //nodemon
+    gulp.watch(['routes/**/*', appFile], ['restart-server']);
 });
 gulp.task('serve', ['build', 'watch'], function() {
-    app.listen(appPort, function() {
-        console.log("Server listening on port " + appPort);
-    });
+    nodemon = gulpNodemon({ script: appFile, ext: 'null' });
 });
 gulp.task('browser-sync', ['serve'], function() {
     browserSync({
@@ -60,7 +64,14 @@ gulp.task('browser-sync', ['serve'], function() {
 });
 
 
-//Reload all Browsers
+//Restart server
+gulp.task('restart-server', function() {
+    if (nodemon) {
+        nodemon.emit('restart');
+        setTimeout(function() {gulp.start('bs-reload');}, 1000);
+    } else gulp.start('serve');
+});
+//Reload all browsers
 gulp.task('bs-reload', function() {
     reload();
 });
