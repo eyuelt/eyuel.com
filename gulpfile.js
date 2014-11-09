@@ -1,10 +1,10 @@
 var gulp = require('gulp');
-var server = require('./server');
+var app = require('./server');
 var del = require('del');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
-var serverPort = 8000;
+var appPort = 8000;
 var browserSyncPort = 8001;
 
 //Clean
@@ -44,17 +44,26 @@ gulp.task('watch', function() {
     gulp.watch('src/styles/**/*', ['build:styles']);
     gulp.watch('src/scripts/**/*', ['build:scripts']);
     gulp.watch('src/images/**/*', ['build:images']);
+    gulp.watch('views/**/*', ['bs-reload']);
+    gulp.watch(['routes/**/*', 'server.js'], ['bs-reload']); //nodemon
 });
 gulp.task('serve', ['build', 'watch'], function() {
-    server.listen(serverPort, function() {
-        console.log("Server listening on port " + serverPort);
+    app.listen(appPort, function() {
+        console.log("Server listening on port " + appPort);
     });
 });
 gulp.task('browser-sync', ['serve'], function() {
     browserSync({
-        proxy: "http://localhost:" + serverPort,
+        proxy: "http://localhost:" + appPort,
         port: browserSyncPort
     });
 });
+
+
+//Reload all Browsers
+gulp.task('bs-reload', function() {
+    reload();
+});
+
 
 gulp.task('default', ['browser-sync']);
