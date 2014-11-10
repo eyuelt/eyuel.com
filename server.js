@@ -12,7 +12,7 @@ app.set('env', process.env.NODE_ENV || 'dev');
 app.use('/static', express.static(__dirname + '/dist'));
 
 //routes
-app.get('/', routes.homepage);
+app.get('/', routes.index);
 app.get('*', routes.notfound);
 
 //only start server if called from command line

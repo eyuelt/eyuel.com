@@ -1,0 +1,19 @@
+extends templates/main_template
+
+block title
+  title= "Hello"
+
+block css
+  link(rel="stylesheet", href="/static/styles/index.css")
+
+block content
+  .main-row
+    .row-content
+      .headshot
+      .social-toolbar.shadow
+        a(href='https://www.github.com/eyuelt' target='_blank')
+          span.site.left GitHub
+        a(href='https://www.linkedin.com/in/eyuel' target='_blank')
+          span.site LinkedIn
+        a(href='https://www.twitter.com/eyueltessema' target='_blank')
+          span.site.right Twitter
