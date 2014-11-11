@@ -3,11 +3,28 @@ extends templates/main_template
 block title
   title= "Hello"
 
+block js
+  script.
+    var originalOffset = 0 - 0.05*0.5*window.innerWidth;
+    var main = document.getElementsByClassName("row-background")[0];
+    main.style.width = 1.05*window.innerWidth + "px";
+    main.style.backgroundSize = main.style.width;
+    main.style.left = originalOffset + "px";
+    document.onmousemove = getMouseXY;
+    function getMouseXY(e) {
+      tempX = e.pageX;
+      tempY = e.pageY;
+      var offset = 0.05 * (0.5*window.innerWidth - tempX) + originalOffset;
+      main.style.left = offset + "px";
+    }
+
 block css
   link(rel="stylesheet", href="/static/styles/index.css")
 
 block content
   .main-row
+    .row-background
+    .row-background-overlay
     .row-content
       .headshot
       .social-toolbar.shadow
